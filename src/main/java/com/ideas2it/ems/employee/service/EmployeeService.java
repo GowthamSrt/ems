@@ -1,26 +1,25 @@
 package com.ideas2it.ems.employee.service;
 
+import com.ideas2it.ems.employee.dto.EmployeeDto;
 import com.ideas2it.ems.model.Employee;
 
 import java.util.List;
 
 public interface EmployeeService {
 
-    Employee addEmployee(Employee employee, int departmentId);
+    EmployeeDto addEmployee(EmployeeDto employeeDto, int departmentId);
 
+    List<EmployeeDto> getAllEmployees();
 
-    List<Employee> getAllEmployees();
+    EmployeeDto getEmployeeById(int id);
 
-
-    Employee getEmployeeById(int id);
-
-
-    Employee updateEmployee(Employee employee, int id);
+    EmployeeDto updateEmployee(EmployeeDto employeeDto, int id);
 
     void addProjectToEmployee(int id, int projectId);
 
-    void removeEmployee(int id);
+    void removeProjectFromEmployee(int id, int projectId);
 
+    void removeEmployee(int id);
 }
 
 

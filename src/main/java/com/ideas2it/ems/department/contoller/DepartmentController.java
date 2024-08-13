@@ -1,9 +1,9 @@
 package com.ideas2it.ems.department.contoller;
 
+import java.util.List;
+
 import com.ideas2it.ems.department.dto.DepartmentDto;
 import com.ideas2it.ems.department.service.DepartmentService;
-import com.ideas2it.ems.mapper.Mapper;
-import com.ideas2it.ems.model.Department;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @RestController
 public class DepartmentController {
     @Autowired
@@ -23,21 +20,17 @@ public class DepartmentController {
 
     @PostMapping("/department")
     public DepartmentDto addDepartment(@RequestBody DepartmentDto departmentDto){
-        return Mapper.mapDepartmentDto(departmentService.addDepartment(Mapper.mapDepartment(departmentDto)));
+        return departmentService.addDepartment(departmentDto);
     }
 
     @GetMapping("/department")
     public List<DepartmentDto> getAllDepartments() {
-        List<DepartmentDto> departments = new ArrayList<>();
-        for (Department department : departmentService.getAllDepartments()) {
-            departments.add(Mapper.mapDepartmentDto(department));
-        }
-        return departments;
+       return departmentService.getAllDepartments();
     }
 
     @PutMapping("/department/{id}")
     public DepartmentDto updateDepartment(@RequestBody DepartmentDto departmentDto, @PathVariable("id") int id) {
-        return Mapper.mapDepartmentDto(departmentService.updateDepartment(Mapper.mapDepartment(departmentDto), id));
+        return departmentService.updateDepartment((departmentDto), id);
     }
 
     @DeleteMapping("/department/{id}")
@@ -48,6 +41,6 @@ public class DepartmentController {
 
     @GetMapping("/department/{id}")
     public DepartmentDto getDepartmentById(@PathVariable("id") int id) {
-        return Mapper.mapDepartmentDto(departmentService.getDepartmentById(id));
+        return departmentService.getDepartmentById(id);
     }
 }

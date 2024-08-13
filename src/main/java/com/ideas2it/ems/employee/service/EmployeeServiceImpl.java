@@ -1,13 +1,23 @@
 package com.ideas2it.ems.employee.service;
 
-import com.ideas2it.ems.department.service.DepartmentService;
-import com.ideas2it.ems.employee.dao.EmployeeRepository;
-import com.ideas2it.ems.model.Employee;
-import com.ideas2it.ems.project.service.ProjectService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import com.ideas2it.ems.model.Project;
+import com.ideas2it.ems.project.mapper.ProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.ideas2it.ems.department.mapper.DepartmentMapper;
+import com.ideas2it.ems.department.service.DepartmentService;
+import com.ideas2it.ems.employee.dao.EmployeeRepository;
+import com.ideas2it.ems.employee.dto.EmployeeDto;
+import com.ideas2it.ems.employee.mapper.EmployeeMapper;
+import com.ideas2it.ems.model.Department;
+import com.ideas2it.ems.model.Employee;
+import com.ideas2it.ems.project.service.ProjectService;
+
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
@@ -20,40 +30,55 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Autowired
     private ProjectService projectService;
 
-
-    public Employee addEmployee(Employee employee, int departmentId) {
-        employee.setDepartment(departmentService.getDepartmentById(departmentId));
-        return employeeRepository.save(employee);
+    public EmployeeDto addEmployee(EmployeeDto employeeDto, int departmentId) {
+        Employee employee = EmployeeMapper.mapEmployee(employeeDto);
+        Department department = DepartmentMapper.mapDepartment(departmentService.getDepartmentById(departmentId));
+        employee.setDepartment(department);
+        return EmployeeMapper.mapEmployeeDto(employeeRepository.save(employee));
     }
 
-    public List<Employee> getAllEmployees() {
-        return (List<Employee>) employeeRepository.findAll();
+    public List<EmployeeDto> getAllEmployees() {
+        List<EmployeeDto> employees = new ArrayList<>();
+        List<Employee> employeesActive = employeeRepository.findByIsActiveTrue();
+        for (Employee employee : employeesActive) {
+            employees.add(EmployeeMapper.mapEmployeeDto(employee));
+        }
+        return employees;
     }
 
-    public Employee getEmployeeById(int id) {
-        return (employeeRepository.findById(id).isPresent() ? employeeRepository.findById(id).get() : null);
+    public EmployeeDto getEmployeeById(int id) {
+        Optional<Employee> employee = employeeRepository.findByEmployeeIdAndIsActiveTrue(id);
+        return EmployeeMapper.mapEmployeeDto(employee
+                .orElseThrow(() -> new RuntimeException("Employee not found for ID: " + id)));
     }
 
-    public Employee updateEmployee(Employee employee, int id) {
-        Employee existingEmployee = getEmployeeById(id);
-        existingEmployee.setName(employee.getName());
-        existingEmployee.setDob(employee.getDob());
-        existingEmployee.setEmail(employee.getEmail());
-        existingEmployee.setDepartment(employee.getDepartment());
-        return employeeRepository.save(existingEmployee);
+    public EmployeeDto updateEmployee(EmployeeDto employeeDto, int id) {
+        Employee existingEmployee = EmployeeMapper.mapEmployee(getEmployeeById(id));
+        existingEmployee.setName(employeeDto.getName());
+        existingEmployee.setDob(employeeDto.getDob());
+        existingEmployee.setEmail(employeeDto.getEmail());
+        existingEmployee.setDepartment(DepartmentMapper.mapDepartment(departmentService.getDepartmentById(id)));
+        return EmployeeMapper.mapEmployeeDto(employeeRepository.save(existingEmployee));
     }
 
     public void removeEmployee(int id) {
-        Employee employee = getEmployeeById(id);
+        Employee employee = EmployeeMapper.mapEmployee(getEmployeeById(id));
         employee.setActive(false);
         employeeRepository.save(employee);
     }
 
     public void addProjectToEmployee(int id, int projectId) {
-        Employee employee = getEmployeeById(id);
-        employee.getProjects().add(projectService.getProjectById(projectId));
+        Employee employee = EmployeeMapper.mapEmployee(getEmployeeById(id));
+        Project project = ProjectMapper.mapProject(projectService.getProjectById(projectId));
+        employee.getProjects().add(project);
         employeeRepository.save(employee);
+    }
 
+    public void removeProjectFromEmployee(int id, int projectId) {
+        Employee employee = EmployeeMapper.mapEmployee(getEmployeeById(id));
+        Project project = ProjectMapper.mapProject(projectService.getProjectById(projectId));
+        employee.getProjects().remove(project);
+        employeeRepository.save(employee);
     }
 }
 

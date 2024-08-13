@@ -1,17 +1,18 @@
 package com.ideas2it.ems.project.service;
 
 import com.ideas2it.ems.model.Project;
+import com.ideas2it.ems.project.dto.ProjectDto;
 
 import java.util.List;
 
 public interface ProjectService {
-    Project addProject(Project project);
+    ProjectDto addProject(ProjectDto projectDto);
 
-    List<Project> getAllProjects();
+    List<ProjectDto> getAllProjects();
 
-    Project updateProject(Project project, int id);
+    ProjectDto updateProject(ProjectDto projectDto, int id);
 
     void deleteProject(int id);
 
-    Project getProjectById(int id);
+    ProjectDto getProjectById(int id);
 }
