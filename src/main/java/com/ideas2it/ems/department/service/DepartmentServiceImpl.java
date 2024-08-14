@@ -35,12 +35,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     public DepartmentDto getDepartmentById(int id) {
         Optional<Department> department = departmentRepository.findById(id);
-        if (department.isPresent()) {
-            return DepartmentMapper.mapDepartmentDto(department.get());
-        }
-        else {
-            return null;
-        }
+        return DepartmentMapper.mapDepartmentDto(department
+                .orElseThrow(() -> new RuntimeException("Department not found for ID: " + id)));
+
     }
 
     public DepartmentDto updateDepartment(DepartmentDto departmentDto, int id) {

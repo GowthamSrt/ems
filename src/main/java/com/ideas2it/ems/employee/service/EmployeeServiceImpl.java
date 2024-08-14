@@ -18,7 +18,6 @@ import com.ideas2it.ems.model.Department;
 import com.ideas2it.ems.model.Employee;
 import com.ideas2it.ems.project.service.ProjectService;
 
-
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
     @Autowired
@@ -29,6 +28,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Autowired
     private ProjectService projectService;
+
 
     public EmployeeDto addEmployee(EmployeeDto employeeDto, int departmentId) {
         Employee employee = EmployeeMapper.mapEmployee(employeeDto);
@@ -47,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     public EmployeeDto getEmployeeById(int id) {
-        Optional<Employee> employee = employeeRepository.findByEmployeeIdAndIsActiveTrue(id);
+        Optional<Employee> employee = employeeRepository.findByIdAndIsActiveTrue(id);
         return EmployeeMapper.mapEmployeeDto(employee
                 .orElseThrow(() -> new RuntimeException("Employee not found for ID: " + id)));
     }
@@ -61,11 +61,14 @@ public class EmployeeServiceImpl implements EmployeeService{
         return EmployeeMapper.mapEmployeeDto(employeeRepository.save(existingEmployee));
     }
 
+
+
     public void removeEmployee(int id) {
         Employee employee = EmployeeMapper.mapEmployee(getEmployeeById(id));
         employee.setActive(false);
         employeeRepository.save(employee);
     }
+
 
     public void addProjectToEmployee(int id, int projectId) {
         Employee employee = EmployeeMapper.mapEmployee(getEmployeeById(id));
@@ -74,11 +77,31 @@ public class EmployeeServiceImpl implements EmployeeService{
         employeeRepository.save(employee);
     }
 
+
     public void removeProjectFromEmployee(int id, int projectId) {
         Employee employee = EmployeeMapper.mapEmployee(getEmployeeById(id));
         Project project = ProjectMapper.mapProject(projectService.getProjectById(projectId));
         employee.getProjects().remove(project);
         employeeRepository.save(employee);
     }
-}
 
+
+    public List<EmployeeDto> getEmployeesByDepartment(int departmentId) {
+        List<Employee> employees = employeeRepository.findByDepartmentIdAndIsActiveTrue(departmentId);
+        List<EmployeeDto> employeeDtos = new ArrayList<>();
+        for (Employee employee : employees) {
+            employeeDtos.add(EmployeeMapper.mapEmployeeDto(employee));
+        }
+        return employeeDtos;
+    }
+
+
+    public List<EmployeeDto> getEmployeesByProject(int projectId) {
+        List<Employee> employees = employeeRepository.findByProjectIdAndIsActiveTrue(projectId);
+        List<EmployeeDto> employeeDtos = new ArrayList<>();
+        for (Employee employee : employees) {
+            employeeDtos.add(EmployeeMapper.mapEmployeeDto(employee));
+        }
+        return employeeDtos;
+    }
+}

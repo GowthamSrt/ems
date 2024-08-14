@@ -4,8 +4,23 @@ import com.ideas2it.ems.employee.dto.EmployeeDto;
 import com.ideas2it.ems.model.Employee;
 import org.springframework.stereotype.Component;
 
+/**
+ * <p>
+ * EmployeeMapper is responsible for converting between Employee entities and EmployeeDto objects.
+ * It helps in mapping entity objects to DTOs and vice versa.
+ * </p>
+ */
 @Component
 public class EmployeeMapper {
+
+    /**
+     * <p>
+     * Maps an Employee entity to an EmployeeDto.
+     * </p>
+     *
+     * @param employee The Employee entity to map.
+     * @return The mapped EmployeeDto object.
+     */
     public static EmployeeDto mapEmployeeDto(Employee employee) {
         EmployeeDto employeeDto = new EmployeeDto();
         employeeDto.setId(employee.getId());
@@ -18,6 +33,14 @@ public class EmployeeMapper {
         return employeeDto;
     }
 
+    /**
+     * <p>
+     * Maps an EmployeeDto to an Employee entity.
+     * </p>
+     *
+     * @param employeeDto The EmployeeDto to map.
+     * @return The mapped Employee entity.
+     */
     public static Employee mapEmployee(EmployeeDto employeeDto) {
         Employee employee = new Employee();
         employee.setId(employeeDto.getId());

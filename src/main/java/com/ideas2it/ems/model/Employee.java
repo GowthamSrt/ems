@@ -6,8 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *<p>
+ * Class initialize all the Employee parameter inputs to a List
+ * which holds all employees details and used to get and show all the details
+ * of an employee.
+ * </p>
+ */
 @Entity
 @Table(name = "employee")
 @Data
@@ -34,10 +42,13 @@ public class Employee {
     private boolean isActive;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "department_id", nullable = false)
+    @JoinColumn(name = "department_id")
     private Department department;
 
     @ManyToMany
-    @JoinTable(name = "employee_project", joinColumns = {@JoinColumn(name = "employee_id")}, inverseJoinColumns = {@JoinColumn(name = "project_id")})
-    private Set<Project> projects;
+    @JoinTable(name = "employee_project",
+               joinColumns = {@JoinColumn(name = "employee_id")},
+               inverseJoinColumns = {@JoinColumn(name = "project_id")})
+
+    private Set<Project> projects = new HashSet<>();
 }

@@ -1,10 +1,16 @@
 package com.ideas2it.ems.employee.dto;
 
-import com.ideas2it.ems.model.Department;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
+/**
+ * <p>
+ * EmployeeDto is a Data Transfer Object that represents an Employee.
+ * It contains fields for transferring employee-related data between layers of the application.
+ * </p>
+ */
 @Data
 public class EmployeeDto {
     private int id;
@@ -21,5 +27,5 @@ public class EmployeeDto {
 
     private String departmentName;
 
-    private int projectId;
+    private List<Integer> projectIds;
 }

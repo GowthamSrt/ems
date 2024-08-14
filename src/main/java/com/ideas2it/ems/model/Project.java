@@ -7,6 +7,13 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+/**
+ * <p>
+ * Represents a project that can be associated with employees.
+ * A project has a unique Identifier, a name and a list of employees
+ * who participate in it.
+ * </p>
+ */
 @Entity
 @Table(name = "project")
 @Data
