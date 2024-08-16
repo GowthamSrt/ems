@@ -3,6 +3,8 @@ package com.ideas2it.ems.project.controller;
 import com.ideas2it.ems.project.dto.ProjectDto;
 import com.ideas2it.ems.project.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,8 +33,8 @@ public class ProjectController {
      */
     @PostMapping("/projects")
     @RequestMapping("api/v1")
-    public ProjectDto addProject(@RequestBody ProjectDto projectDto){
-        return projectService.addProject(projectDto);
+    public ResponseEntity<ProjectDto> addProject(@RequestBody ProjectDto projectDto){
+        return new ResponseEntity<>(projectService.addProject(projectDto), HttpStatus.CREATED);
     }
 
     /**
@@ -43,8 +45,8 @@ public class ProjectController {
      * @return A list of ProjectDto objects.
      */
     @GetMapping("/projects")
-    public List<ProjectDto> getAllProjects() {
-        return projectService.getAllProjects();
+    public ResponseEntity<List<ProjectDto>> getAllProjects() {
+        return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
     }
 
     /**
@@ -57,8 +59,8 @@ public class ProjectController {
      * @return The updated ProjectDto object.
      */
     @PutMapping("/projects/{id}")
-    public ProjectDto updateProject(@RequestBody ProjectDto projectDto, @PathVariable("id") int id) {
-        return projectService.updateProject(projectDto, id);
+    public ResponseEntity<ProjectDto> updateProject(@RequestBody ProjectDto projectDto, @PathVariable("id") int id) {
+        return new ResponseEntity<>(projectService.updateProject(projectDto, id), HttpStatus.ACCEPTED);
     }
 
     /**
@@ -82,7 +84,7 @@ public class ProjectController {
      * @return The ProjectDto object of the retrieved project.
      */
     @GetMapping("/projects/{id}")
-    public ProjectDto getProjectById(@PathVariable("id") int id) {
-        return projectService.getProjectById(id);
+    public ResponseEntity<ProjectDto> getProjectById(@PathVariable("id") int id) {
+        return new ResponseEntity<>(projectService.getProjectById(id), HttpStatus.OK);
     }
 }

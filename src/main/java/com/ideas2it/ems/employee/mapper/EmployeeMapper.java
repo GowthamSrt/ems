@@ -2,6 +2,7 @@ package com.ideas2it.ems.employee.mapper;
 
 import com.ideas2it.ems.employee.dto.EmployeeDto;
 import com.ideas2it.ems.model.Employee;
+import com.ideas2it.ems.util.DateUtil;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,6 +27,7 @@ public class EmployeeMapper {
         employeeDto.setId(employee.getId());
         employeeDto.setName(employee.getName());
         employeeDto.setDob(employee.getDob());
+        employeeDto.setAge(DateUtil.calculateAge(employee.getDob()));
         employeeDto.setDepartmentId(employee.getDepartment().getId());
         employeeDto.setDepartmentName(employee.getDepartment().getName());
         employeeDto.setMobileNumber(employee.getMobileNumber());

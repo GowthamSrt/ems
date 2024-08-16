@@ -4,7 +4,10 @@ import java.util.List;
 
 import com.ideas2it.ems.department.dto.DepartmentDto;
 import com.ideas2it.ems.department.service.DepartmentService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,8 +36,8 @@ public class DepartmentController {
      * @return The added DepartmentDto object.
      */
     @PostMapping("/department")
-    public DepartmentDto addDepartment(@RequestBody DepartmentDto departmentDto){
-        return departmentService.addDepartment(departmentDto);
+    public ResponseEntity<DepartmentDto> addDepartment(@RequestBody DepartmentDto departmentDto){
+        return new ResponseEntity<>(departmentService.addDepartment(departmentDto), HttpStatus.CREATED);
     }
 
     /**
@@ -45,8 +48,8 @@ public class DepartmentController {
      * @return A list of DepartmentDto objects.
      */
     @GetMapping("/department")
-    public List<DepartmentDto> getAllDepartments() {
-       return departmentService.getAllDepartments();
+    public ResponseEntity<List<DepartmentDto>> getAllDepartments() {
+       return new ResponseEntity<>(departmentService.getAllDepartments(), HttpStatus.OK);
     }
 
     /**
@@ -57,8 +60,8 @@ public class DepartmentController {
      * @return The updated DepartmentDto object.
      */
     @PutMapping("/department/{id}")
-    public DepartmentDto updateDepartment(@RequestBody DepartmentDto departmentDto, @PathVariable("id") int id) {
-        return departmentService.updateDepartment((departmentDto), id);
+    public ResponseEntity<DepartmentDto> updateDepartment(@RequestBody DepartmentDto departmentDto, @PathVariable("id") int id) {
+        return new ResponseEntity<>(departmentService.updateDepartment((departmentDto), id), HttpStatus.ACCEPTED);
     }
 
     /**
@@ -83,7 +86,7 @@ public class DepartmentController {
      * @return The DepartmentDto object of the retrieved department.
      */
     @GetMapping("/department/{id}")
-    public DepartmentDto getDepartmentById(@PathVariable("id") int id) {
-        return departmentService.getDepartmentById(id);
+    public ResponseEntity<DepartmentDto> getDepartmentById(@PathVariable("id") int id) {
+        return new ResponseEntity<>(departmentService.getDepartmentById(id), HttpStatus.OK);
     }
 }

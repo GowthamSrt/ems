@@ -3,7 +3,6 @@ package com.ideas2it.ems.employee.dto;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.List;
 
 /**
  * <p>
@@ -27,5 +26,5 @@ public class EmployeeDto {
 
     private String departmentName;
 
-    private List<Integer> projectIds;
+    private String age;
 }
