@@ -2,6 +2,7 @@ package com.ideas2it.ems.project.controller;
 
 import com.ideas2it.ems.project.dto.ProjectDto;
 import com.ideas2it.ems.project.service.ProjectService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,8 @@ import java.util.List;
  */
 
 @RestController
+@RequestMapping("api/v1")
 public class ProjectController {
-    @Autowired
-    private ProjectService projectService;
-
     /**
      * <p>
      * Adds a new project into the database.
@@ -32,10 +31,12 @@ public class ProjectController {
      * @return The added ProjectDto object.
      */
     @PostMapping("/projects")
-    @RequestMapping("api/v1")
-    public ResponseEntity<ProjectDto> addProject(@RequestBody ProjectDto projectDto){
+    public ResponseEntity<ProjectDto> addProject(@Valid @RequestBody ProjectDto projectDto){
         return new ResponseEntity<>(projectService.addProject(projectDto), HttpStatus.CREATED);
     }
+
+    @Autowired
+    private ProjectService projectService;
 
     /**
      * <p>
@@ -59,7 +60,7 @@ public class ProjectController {
      * @return The updated ProjectDto object.
      */
     @PutMapping("/projects/{id}")
-    public ResponseEntity<ProjectDto> updateProject(@RequestBody ProjectDto projectDto, @PathVariable("id") int id) {
+    public ResponseEntity<ProjectDto> updateProject(@Valid @RequestBody ProjectDto projectDto, @PathVariable("id") int id) {
         return new ResponseEntity<>(projectService.updateProject(projectDto, id), HttpStatus.ACCEPTED);
     }
 

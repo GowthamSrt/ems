@@ -46,4 +46,8 @@ public class ProjectServiceImpl implements ProjectService {
         return ProjectMapper.mapProjectDto(project
                 .orElseThrow(() -> new RuntimeException("Project not found for ID: " + id)));
     }
+
+//    public Optional<Project> getsProjectById(int id) {
+//        return projectRepository.findById(id);
+//    }
 }

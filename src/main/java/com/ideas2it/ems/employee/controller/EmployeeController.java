@@ -1,9 +1,11 @@
 package com.ideas2it.ems.employee.controller;
 
-import com.ideas2it.ems.department.service.DepartmentService;
-import com.ideas2it.ems.employee.dto.EmployeeDto;
-import com.ideas2it.ems.employee.service.EmployeeService;
-import com.ideas2it.ems.project.service.ProjectService;
+import java.util.List;
+
+import com.ideas2it.ems.exception.EmsException;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.ideas2it.ems.department.service.DepartmentService;
+import com.ideas2it.ems.employee.dto.EmployeeDto;
+import com.ideas2it.ems.employee.service.EmployeeService;
+import com.ideas2it.ems.project.service.ProjectService;
 
 /**
  * <p>
@@ -30,6 +35,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1")
 public class EmployeeController {
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
     @Autowired
     private EmployeeService employeeService;
     @Autowired
@@ -46,8 +52,8 @@ public class EmployeeController {
      * @return The added EmployeeDto object.
      */
     @PostMapping("/employees")
-    public ResponseEntity<EmployeeDto> addEmployee(@RequestBody EmployeeDto employeeDto) {
-        return new ResponseEntity<>(employeeService.addEmployee(employeeDto, employeeDto.getDepartmentId()), HttpStatus.CREATED);
+    public ResponseEntity<EmployeeDto> addEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
+        return new ResponseEntity<>(employeeService.addEmployee(employeeDto, employeeDto.getDepartmentId()),HttpStatus.CREATED);
     }
 
     /**
@@ -85,7 +91,7 @@ public class EmployeeController {
      * @return The updated EmployeeDto object.
      */
     @PutMapping("/employees/{id}")
-    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody EmployeeDto employeeDto, @PathVariable int id) {
+    public ResponseEntity<EmployeeDto> updateEmployee(@Valid @RequestBody EmployeeDto employeeDto, @PathVariable int id) {
         return new ResponseEntity<>(employeeService.updateEmployee(employeeDto, id), HttpStatus.ACCEPTED);
     }
 
@@ -96,10 +102,10 @@ public class EmployeeController {
      *
      * @param id The ID of the employee to remove.
      */
-    @DeleteMapping("/employees/delete/{id}")
-    public String removeEmployee(@PathVariable int id) {
+    @DeleteMapping("/employees/{id}")
+    public void removeEmployee(@PathVariable int id) {
         employeeService.removeEmployee(id);
-        return "Employee Deleted Successfully!!!";
+        logger.info("Employee Deleted Successfully!!!");
     }
 
     /**
@@ -110,7 +116,7 @@ public class EmployeeController {
      * @param id The ID of the employee.
      * @param projectId The ID of the project to add.
      */
-    @PostMapping("/employees/{id}/project/{projectId}")
+    @PostMapping("/employees/{id}/projects/{projectId}")
     public void addProjectToEmployee(@PathVariable int id, @PathVariable int projectId) {
         employeeService.addProjectToEmployee(id, projectId);
     }
@@ -123,7 +129,7 @@ public class EmployeeController {
      * @param id The ID of the employee.
      * @param projectId The ID of the project to remove.
      */
-    @DeleteMapping("/employees/{id}/project/{projectId}")
+    @DeleteMapping("/employees/{id}/projects/{projectId}")
     public void removeProjectFromEmployee(@PathVariable int id, @PathVariable int projectId) {
         employeeService.removeProjectFromEmployee(id, projectId);
     }
@@ -136,7 +142,7 @@ public class EmployeeController {
      * @param id The ID of the department.
      * @return The EmployeeDto object for the employees in the department.
      */
-    @GetMapping("/employees/department/{id}")
+    @GetMapping("/employees/departments/{id}")
     public ResponseEntity<List<EmployeeDto>> getEmployeeByDepartment(@PathVariable int id) {
         return new ResponseEntity<>(employeeService.getEmployeesByDepartment(id), HttpStatus.OK);
     }
@@ -149,7 +155,7 @@ public class EmployeeController {
      * @param id The ID of the project.
      * @return The EmployeeDto object for the employees in the project.
      */
-    @GetMapping("/employees/project/{id}")
+    @GetMapping("/employees/projects/{id}")
     public ResponseEntity<List<EmployeeDto>> getEmployeeByProject(@PathVariable int id) {
         return new ResponseEntity<>(employeeService.getEmployeesByProject(id), HttpStatus.OK);
     }

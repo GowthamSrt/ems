@@ -99,6 +99,8 @@ public interface EmployeeService {
      * @param projectId The ID of the project.
      */
     List<EmployeeDto> getEmployeesByProject(int projectId);
+
+//    public boolean isEmailExists(String email);
 }
 
 

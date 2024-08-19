@@ -52,4 +52,11 @@ public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
      */
     @Query("select e from Employee e join e.projects p where p.id = :projectId and e.isActive = true")
     List<Employee> findByProjectIdAndIsActiveTrue(@Param("projectId") int projectId);
+
+//    @Query("from employee e left join e.projects p where e.id = :id")
+//    Employee getProject;
+
+    boolean existsByEmail(String email);
+
+    boolean existsByMobileNumber(String mobileNumber);
 }
